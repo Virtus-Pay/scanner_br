@@ -9,9 +9,10 @@ export 'package:scannerbr/scanner_br_service/scanner_br_controller.dart';
 typedef void ScannerViewCreatedCallback(ScannerService controller);
 
 class ScannerViewBr extends StatefulWidget {
+  final void Function(String value) onValue;
   const ScannerViewBr({
     Key key,
-    this.onScannerViewCreated,
+    this.onScannerViewCreated, this.onValue,
   }) : super(key: key);
 
   final ScannerViewCreatedCallback onScannerViewCreated;
@@ -39,7 +40,9 @@ class _ScannerViewBrState extends State<ScannerViewBr> {
     }
     widget.onScannerViewCreated(
       new ScannerController(
+
         new MethodChannel("plugins.flutterplatform/scannerbr_$id"),
+        onValue:widget.onValue,
       ),
     );
     setState(() {

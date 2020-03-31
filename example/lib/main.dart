@@ -3,15 +3,29 @@ import 'package:flutter/services.dart';
 import 'package:scannerbr/scannerbr.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+
+  const MyApp({Key key}) : super(key: key);
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home:const ScannerTest(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+
+class ScannerTest extends StatefulWidget {
+  const ScannerTest({Key key}) : super(key: key);
+
+  @override
+  _ScannerTestState createState() => _ScannerTestState();
+}
+
+class _ScannerTestState extends State<ScannerTest> {
   ScannerService _scannerService;
   bool enabled = false;
 
@@ -41,37 +55,43 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        floatingActionButton: FloatingActionButton(onPressed: () async {
-          if (enabled) {
-            await _scannerService.stop();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Plugin example app'),
+        actions: <Widget>[IconButton(
+          onPressed: (){
             setState(() {
-              enabled = !enabled;
+
             });
-          } else {
-            await _scannerService.start();
-            setState(() {
-              enabled = !enabled;
-            });
-          }
-        }),
-        body: Center(
-          child: Container(
-            width: 300,
-            height: 300,
-            child: ScannerViewBr(
-              onScannerViewCreated: (ScannerService scannerService) async {
-                _scannerService = scannerService;
-                await _scannerService.start();
-              },
-            ),
-          ),
+          },
+          icon: Icon(Icons.face),
+        )],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        if (enabled) {
+          await _scannerService.stop();
+          setState(() {
+            enabled = !enabled;
+          });
+        } else {
+          await _scannerService.start();
+          setState(() {
+            enabled = !enabled;
+          });
+        }
+      }),
+      body: Container(
+        child: ScannerViewBr(
+          onValue: (e){
+            print(e);
+          },
+          onScannerViewCreated: (ScannerService scannerService) async {
+            _scannerService = scannerService;
+            //   await _scannerService.start();
+          },
         ),
       ),
     );

@@ -19,9 +19,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.ResultHandler,PluginRegistry.RequestPermissionsResultListener {
     final PluginRegistry.Registrar registrar;
     final ZXingScannerView zXingScannerView;
-    final MethodChannel methodChannel;
-
-
+    MethodChannel methodChannel;
 
 
     public ScannerBrPlatformView(PluginRegistry.Registrar registrar, int id) {
@@ -30,10 +28,13 @@ public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.Resu
         zXingScannerView = new ZXingScannerView(registrar.activity());
         zXingScannerView.setResultHandler(this);
         methodChannel = new MethodChannel(registrar.messenger(),"plugins.flutterplatform/scannerbr_" + id);
+
         ScannerHandler scannerStartHandler = new ScannerStartHandler(zXingScannerView, registrar.activity());
         ScannerHandler scannerStopHandler = new ScannerStopHandler(zXingScannerView);
         scannerStartHandler.setNext(scannerStopHandler);
         methodChannel.setMethodCallHandler(scannerStartHandler);
+        registrar.addRequestPermissionsResultListener(this);
+
 
 
         /*
@@ -45,19 +46,7 @@ public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.Resu
             zXingScannerView.startCamera();
          */
 
-
-
-
-
-
-
-
-
-
-
-
     }
-
 
 
     @Override
@@ -67,15 +56,19 @@ public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.Resu
 
     @Override
     public void dispose() {
-
-
+        zXingScannerView.setResultHandler(null);
+        zXingScannerView.removeAllViews();
+        zXingScannerView.stopCamera();
+     methodChannel.setMethodCallHandler(null);
+     methodChannel = null;
     }
 
     @Override
     public void handleResult(Result rawResult) {
-
         Log.d("RESULT",rawResult.getText());
-      //  zXingScannerView.resumeCameraPreview(this);
+        methodChannel.invokeMethod("onResult",rawResult.getText());
+       zXingScannerView.resumeCameraPreview(this);
+
     }
 
     @Override
@@ -84,7 +77,7 @@ public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.Resu
 
         if (requestCode == 100) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                zXingScannerView.startCamera();
             }
         }
         return true;

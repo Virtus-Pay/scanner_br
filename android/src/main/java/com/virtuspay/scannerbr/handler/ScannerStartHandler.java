@@ -42,7 +42,6 @@ public class ScannerStartHandler implements  ScannerHandler , PluginRegistry.Req
 
                 } else {
                     zXingScannerView.startCamera();
-                    zXingScannerView.setAutoFocus(true);
                 }
 
             } else {
