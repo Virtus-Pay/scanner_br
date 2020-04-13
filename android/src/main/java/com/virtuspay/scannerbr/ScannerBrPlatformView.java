@@ -68,8 +68,8 @@ public class ScannerBrPlatformView implements PlatformView,ZXingScannerView.Resu
             }
         };
 
-        final List<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
-         zXingScannerView.setFormats(formats);
+       //final List<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE);
+        // zXingScannerView.setFormats(formats);
         zXingScannerView.setResultHandler(this);
         methodChannel = new MethodChannel(registrar.messenger(),"plugins.flutterplatform/scannerbr_" + id);
 
