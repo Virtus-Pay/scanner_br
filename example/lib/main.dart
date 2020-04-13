@@ -7,16 +7,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:const ScannerTest(),
+      home: const ScannerTest(),
     );
   }
 }
-
 
 class ScannerTest extends StatefulWidget {
   const ScannerTest({Key key}) : super(key: key);
@@ -31,11 +29,8 @@ class _ScannerTestState extends State<ScannerTest> {
 
   @override
   void initState() {
-
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
     ]);
 
     super.initState();
@@ -43,7 +38,6 @@ class _ScannerTestState extends State<ScannerTest> {
 
   @override
   void dispose() {
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -51,24 +45,22 @@ class _ScannerTestState extends State<ScannerTest> {
       DeviceOrientation.portraitDown,
     ]);
 
-
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Plugin example app'),
-        actions: <Widget>[IconButton(
-          onPressed: (){
-            setState(() {
-
-            });
-          },
-          icon: Icon(Icons.face),
-        )],
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              setState(() {});
+            },
+            icon: Icon(Icons.face),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         if (enabled) {
@@ -85,7 +77,7 @@ class _ScannerTestState extends State<ScannerTest> {
       }),
       body: Container(
         child: ScannerViewBr(
-          onValue: (e){
+          onValue: (e) {
             print(e);
           },
           onScannerViewCreated: (ScannerService scannerService) async {
